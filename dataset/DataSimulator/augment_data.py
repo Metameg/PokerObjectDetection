@@ -57,7 +57,7 @@ def augment_labels(input_dir, output_dir):
     transform = A.Compose([
         A.HorizontalFlip(p=0.5),
         A.VerticalFlip(p=0.2),
-        A.Rotate(limit=15, p=0.5),
+        # A.Rotate(limit=15, p=0.5),
         A.RandomBrightnessContrast(p=0.3),
         A.GaussNoise(p=0.2),
         A.RandomScale(scale_limit=0.2, p=0.4),
@@ -84,6 +84,6 @@ def augment_labels(input_dir, output_dir):
                 cv2.imwrite(aug_path, cv2.cvtColor(augmented, cv2.COLOR_RGB2BGR))
 
 input_dir = "dataset\\assets\cards\labels_default"
-augmented_dir = "dataset\\assets\cards\labels_augmented"
+augmented_dir = "dataset\\assets\cards\labels_augmented2"
 augment_labels(input_dir, augmented_dir)
-remove_backgrounds(augmented_dir)
+# remove_backgrounds(augmented_dir)

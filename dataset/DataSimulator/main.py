@@ -5,10 +5,10 @@ from pathlib import Path
 from collections import defaultdict
 
 # Paths
-CARD_DIR = Path("dataset\\assets\\cards\\labels_augmented")
+CARD_DIR = Path("dataset\\assets\\cards\\labels_default")
 TABLE_PATH = Path("dataset\\assets\\table.png")
-OUTPUT_IMAGES = Path("dataset\\output\\images")
-OUTPUT_LABELS = Path("dataset\\output\\labels")
+OUTPUT_IMAGES = Path("dataset\\images")
+OUTPUT_LABELS = Path("dataset\\labels")
 
 OUTPUT_IMAGES.mkdir(parents=True, exist_ok=True)
 OUTPUT_LABELS.mkdir(parents=True, exist_ok=True)
@@ -92,7 +92,7 @@ while any(used_card_count[c] < TARGET_USES_PER_CARD for c in card_names):
     # Save image and label
     img_path = OUTPUT_IMAGES / f"poker_{image_id}.jpg"
     label_path = OUTPUT_LABELS / f"poker_{image_id}.txt"
-    table.convert("RGB").save(img_path)
+    table.convert("RGB").save(img_path) # Convert to RGB so png can be saved as jpg (important for YOLO)
     with open(label_path, "w") as f:
         f.write("\n".join(labels))
 

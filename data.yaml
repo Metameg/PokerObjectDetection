@@ -1,4 +1,4 @@
-path: dataset_no_augment  # Root dir with 'images' and 'labels' folders
+path: dataset_no_rotate  # Root dir with 'images' and 'labels' folders
 
 train: images/train          # relative to 'path'
 val: images/val              # relative to 'path'

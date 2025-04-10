@@ -1,11 +1,11 @@
-import os
+import shutil
 import random
 from PIL import Image
 from pathlib import Path
 from collections import defaultdict
 
 # Paths
-CARD_DIR = Path("dataset\\assets\\cards\\labels_default")
+CARD_DIR = Path("dataset\\assets\\cards\\labels_augmented_no_rotate")
 TABLE_PATH = Path("dataset\\assets\\table.png")
 OUTPUT_IMAGES = Path("dataset\\images")
 OUTPUT_LABELS = Path("dataset\\labels")
@@ -43,6 +43,41 @@ def get_random_augmented_card_image(card_name):
     augmented_images = list(card_folder.glob("*.png"))
 
     return random.choice(augmented_images)
+
+def split_data():
+    from pathlib import Path
+    from sklearn.model_selection import train_test_split
+
+    # --- CONFIG ---
+    DATASET_DIR = Path("dataset")
+    IMAGES_DIR = DATASET_DIR / "images"
+    LABELS_DIR = DATASET_DIR / "labels"
+    SPLITS = {"train": 0.8, "val": 0.1, "test": 0.1} 
+
+    # --- Create output folders ---
+    for split in SPLITS.keys():
+        (DATASET_DIR / f"images/{split}").mkdir(parents=True, exist_ok=True)
+        (DATASET_DIR / f"labels/{split}").mkdir(parents=True, exist_ok=True)
+
+    # --- Collect image files ---
+    image_files = IMAGES_DIR.glob("*.jpg")
+    image_files = list(image_files)
+
+    # --- Split by sampling images: random with stratified option (SEEDED)---
+    train_imgs, test_imgs = train_test_split(image_files, test_size=SPLITS["test"], random_state=42)
+    val_imgs, test_imgs = train_test_split(test_imgs, test_size=0.5, random_state=42)  # 50% of test set for validation
+
+    # --- Function to copy images and labels ---
+    def copy_files(img_list, split_name):
+        for img_path in img_list:
+            label_path = LABELS_DIR / (img_path.stem + ".txt")
+            shutil.copy(img_path, DATASET_DIR / f"images/{split_name}/{img_path.name}")
+            shutil.copy(label_path, DATASET_DIR / f"labels/{split_name}/{label_path.name}")
+
+    # --- Perform the actual file copying ---
+    copy_files(train_imgs, "train")
+    copy_files(val_imgs, "val")
+    copy_files(test_imgs, "test")
 
 # Main image generation loop
 image_id = 0
@@ -105,3 +140,5 @@ while any(used_card_count[c] < TARGET_USES_PER_CARD for c in card_names):
 print("Final card usage:")
 for card, count in sorted(used_card_count.items()):
     print(f"{card}: {count}")
+
+split_data()

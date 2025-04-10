@@ -13,7 +13,7 @@ def capture_area(x, y, width, height, save_path):
     # Define the region (left, top, right, bottom)
     region = (x, y, x + width, y + height)
     screenshot = ImageGrab.grab(bbox=region)  # Capture the area
-    screenshot.save(save_path)  # Save the screenshot to the specified path
+    screenshot.save(save_path, "JPEG")  # Save the screenshot to the specified path
     print(f"Screenshot saved to {save_path}")
 
 # Coordinates and dimensions of the area to capture
@@ -26,7 +26,7 @@ width_flop1, height_flop1 = 108, 70
 try:
     for i in range(20):  # Take 10 snapshots as an example
         timestamp = int(time.time())  # Generate a unique name using a timestamp
-        save_path = f"dataset\\assets\\table.png"
+        save_path = f"screenshots\\unseen_img.jpg"
         capture_area(x, y, width, height, save_path)
         time.sleep(5)  # Wait for 5 seconds
 except KeyboardInterrupt:

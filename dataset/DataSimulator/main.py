@@ -5,7 +5,7 @@ from pathlib import Path
 from collections import defaultdict
 
 # Paths
-CARD_DIR = Path("dataset\\assets\\cards\\labels_augmented_no_rotate")
+CARD_DIR = Path("dataset\\assets\\cards\\labels_no_rotate_no_bg")
 TABLE_PATH = Path("dataset\\assets\\table.png")
 OUTPUT_IMAGES = Path("dataset\\images")
 OUTPUT_LABELS = Path("dataset\\labels")

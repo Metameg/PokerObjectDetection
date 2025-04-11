@@ -39,11 +39,16 @@ def remove_backgrounds(input_dir):
 
                 new_data = []
                 for item in datas:
+                    r, g, b, a = item
+                    
                     # Change white (or near-white) to transparent
-                    if item[0] < 10 and item[1] < 10 and item[2] < 10:
+                    if r < 10 and g < 10 and b < 10:
+                        new_data.append((255, 255, 255, 0))
+                    # Remove greenish background (tweak these ranges if needed)
+                    elif 30 < r < 80 and 100 < g < 160 and 30 < b < 80:
                         new_data.append((255, 255, 255, 0))
                     else:
-                        new_data.append(item)
+                        new_data.append((r, g, b, a))
 
                 img.putdata(new_data)
                 img.save(os.path.join(sub_dir_path, filename.replace('.jpg', '.png')))
@@ -84,6 +89,6 @@ def augment_labels(input_dir, output_dir):
                 cv2.imwrite(aug_path, cv2.cvtColor(augmented, cv2.COLOR_RGB2BGR))
 
 input_dir = "dataset\\assets\cards\labels_default"
-augmented_dir = "dataset\\assets\cards\labels_augmented2"
+augmented_dir = "dataset\\assets\cards\labels_no_rotate_no_bg"
 augment_labels(input_dir, augmented_dir)
-# remove_backgrounds(augmented_dir)
+remove_backgrounds(augmented_dir)
